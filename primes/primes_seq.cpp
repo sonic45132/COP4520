@@ -1,6 +1,9 @@
 #include <mutex>
+#include <atomic>
 #include <thread>
 #include <iostream>
+
+#define MAX 40000000
 
 const char* BoolToString(bool b)
 {
@@ -9,7 +12,7 @@ const char* BoolToString(bool b)
 
 int calc_primes(bool* nums)
 {
-  for(int i = 3; i < 50001; i++)
+  for(int i = 3; i < MAX; i++)
   {
     bool isPrime = true;
     for(int j = 2; j < i; j++)
@@ -28,7 +31,7 @@ void print_results(bool* nums)
 {
   std::cout << "1 : true" << std::endl;
   std::cout << "2 : true" << std::endl;
-  for(int i=3;i<50001;i++)
+  for(int i=3;i<MAX;i++)
   {
     std::cout << i << " : " << BoolToString(nums[i]) << std::endl;
   }
@@ -36,9 +39,9 @@ void print_results(bool* nums)
 
 int main() 
 {
-  bool nums[50000] = {0};
+  bool* nums = new bool[MAX];
   calc_primes(nums);
-  print_results(nums);
+  //print_results(nums);
   //std::mutex mutexs[5000];
 
   // std::thread t[4];

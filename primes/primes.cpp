@@ -1,12 +1,28 @@
 #include <mutex>
+#include <cmath>
+#include <atomic>
 #include <thread>
 #include <vector>
 #include <iostream>
 
-#define MAX 1000000
+#define MAX 100000000
 
-int nums[MAX] = {2};
+char* nums;
 std::mutex mux[MAX];
+
+int isPrime(int num) 
+{
+  int prime = 1;
+  for(int i = 2; i < sqrt(num); i++)
+  {
+    if(num%i == 0)
+    {
+      prime = 0;
+      break;
+    }
+  } 
+  return prime;
+}
 
 void calc_primes(int id)
 {
@@ -27,16 +43,7 @@ void calc_primes(int id)
         continue;
       }
 
-      int isPrime = 1;
-      for(int j = 2; j < i; j++)
-      {
-        if(i%j == 0)
-        {
-          isPrime = 0;
-          break;
-        }
-      }
-      nums[i] = isPrime;
+      nums[i] = isPrime(i);
       lck.unlock();
       // for(int  j = 0; j < MAX/i; j++) {
       //   int mult = j*i;
@@ -72,13 +79,14 @@ void print_results()
   std::cout << "2" << std::endl;
   for(int i=3;i<MAX;i++)
   {
-    if(nums[i])
+    if(nums[i] == 1)
       std::cout << i << std::endl;
   }
 }
 
 int main(int argc, char* argv[]) 
 {
+  nums = new char[MAX];
   std::fill_n(nums, MAX, 2);
   int num_threads;
   if(argc < 2)
