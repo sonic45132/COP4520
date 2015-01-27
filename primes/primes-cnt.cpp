@@ -1,10 +1,12 @@
 #include <mutex>
+#include <cmath>
+#include <ctime>
 #include <atomic>
 #include <thread>
 #include <vector>
 #include <iostream>
 
-#define MAX 1000000
+#define MAX 100000000
 
 char* nums;
 std::atomic<int> counter;
@@ -12,7 +14,7 @@ std::atomic<int> counter;
 int isPrime(int num) 
 {
   int prime = 1;
-  for(int i = 2; i < num; i++)
+  for(int i = 3; i < sqrt(num); i+=2)
   {
     if(num%i == 0)
     {
@@ -58,24 +60,57 @@ void calc_primes(int id)
   }
 }
 
-const char* BoolToString(bool b)
+void print_primes()
 {
-  return b ? "true" : "false";
+  for(int i=0;i<MAX;i++)
+  {
+    if(nums[i] == 1)
+    {
+      std::cout << i << std::endl;
+    }
+  }
 }
 
 void print_results() 
 {
-  std::cout << "1" << std::endl;
-  std::cout << "2" << std::endl;
-  for(int i=3;i<MAX;i++)
+  int counter = 0, sum = 3;
+  for(int i = 0; i < MAX; i++)
   {
     if(nums[i] == 1)
-      std::cout << i << std::endl;
+      counter++;
   }
+  std::cout << counter << std::endl;
+  for(int i = 3; i < MAX; i+=2)
+  {
+    if(nums[i] == 1)
+      sum += i;
+  }
+  std::cout << sum << std::endl;
+
+  std::vector<int> top;
+  int num = 0;
+
+  for(int i = MAX-1; num < 10; i--)
+  {
+    if(nums[i] == 1)
+    {
+      //std::cout << "Is prime :" << i << std::endl;
+      top.insert(top.begin(),i);
+      num++;
+    }
+  }
+
+  for (std::vector<int>::iterator it = top.begin(); it != top.end(); ++it)
+  {
+    std::cout << *it << std::endl;
+  }
+
 }
 
 int main(int argc, char* argv[]) 
 {
+  clock_t start = clock();
+  
   nums = new char[MAX];
   std::fill_n(nums, MAX, 2);
   
@@ -95,7 +130,11 @@ int main(int argc, char* argv[])
 
   for (auto &thread : threads) thread.join();
 
-  //print_results();
+  clock_t stop = clock();
+  //std::cout << (stop - start)/(double)CLOCKS_PER_SEC << std::endl;
+
+  print_results();
+  //print_primes();
 
   return 0;
 }

@@ -1,21 +1,22 @@
-#include <mutex>
-#include <atomic>
-#include <thread>
+#include <cmath>
 #include <iostream>
 
-#define MAX 40000000
+#define MAX 100000000
 
 const char* BoolToString(bool b)
 {
   return b ? "true" : "false";
 }
 
-int calc_primes(bool* nums)
+int calc_primes(char* nums)
 {
   for(int i = 3; i < MAX; i++)
   {
+    if(i%2==0)
+      continue;
+
     bool isPrime = true;
-    for(int j = 2; j < i; j++)
+    for(int j = 3; j < sqrt(i); j+=2)
     {
       if(i%j == 0)
       {
@@ -27,7 +28,7 @@ int calc_primes(bool* nums)
   }
 }
 
-void print_results(bool* nums) 
+void print_results(char* nums) 
 {
   std::cout << "1 : true" << std::endl;
   std::cout << "2 : true" << std::endl;
@@ -37,10 +38,23 @@ void print_results(bool* nums)
   }
 }
 
+void print_primes(char* nums)
+{
+  for(int i=0;i<MAX;i++)
+  {
+    if(nums[i])
+    {
+      std::cout << i << std::endl;
+    }
+  }
+}
+
 int main() 
 {
-  bool* nums = new bool[MAX];
+  std::cout << "Finding primes <= " << MAX << std::endl;
+  char* nums = new char[MAX];
   calc_primes(nums);
+  print_primes(nums);
   //print_results(nums);
   //std::mutex mutexs[5000];
 

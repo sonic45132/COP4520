@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 
-#define MAX 100000000
+#define MAX 1000000
 
 char* nums;
 std::mutex mux[MAX];

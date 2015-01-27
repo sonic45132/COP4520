@@ -15,7 +15,7 @@ std::atomic_char mux[MAX] = {};
 int isPrime(int num) 
 {
   int prime = 1;
-  for(int i = 2; i < sqrt(num); i++)
+  for(int i = 3; i < sqrt(num); i+=2)
   {
     if(num%i == 0)
     {
@@ -35,7 +35,7 @@ void calc_primes(int id)
     if(i%2==0)
       continue;
 
-    if(mux[i].compare_exchange_weak(expected,(char)1))
+    if(mux[i].compare_exchange_strong(expected,(char)1))
     {
       //std::cout << "Thread " << id << ": working on " << i << std::endl;
       //std::cout << "Thread " << id << " got lock on " << i << std::endl;
